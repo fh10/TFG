@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.aashari.code.miband2">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="id.oscar.code.miband3">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
@@ -12,8 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity">
-        </activity>
+        <activity android:name=".Activities.RegistryActivity"></activity>
+        <activity
+            android:name=".Activities.ui.login.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.DeviceScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +27,10 @@
             </intent-filter>
         </activity>
 
+        <meta-data xmlns:tools="http://schemas.android.com/tools"
+            android:name="android.support.VERSION"
+            android:value="26.1.0"
+            tools:node="replace" />
     </application>
 
 </manifest>

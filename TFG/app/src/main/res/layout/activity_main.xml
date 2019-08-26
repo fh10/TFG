@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context="id.aashari.code.miband2.Activities.MainActivity">
+    tools:context="id.oscar.code.miband3.Activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,10 +58,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="106dp"
         android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
 
         <Button
             android:id="@+id/btnGetBatteryInfo"
@@ -125,6 +125,12 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:scrollHorizontally="false" />
+
+        <Button
+            android:id="@+id/btnSendNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calcular pasos" />
     </LinearLayout>
 
 </LinearLayout>

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "id.aashari.code.miband2"
+        applicationId "id.oscar.code.miband3"
         minSdkVersion 21
         targetSdkVersion 19
         versionCode 1
@@ -21,6 +21,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:design:25.4.0'
+    compile 'android.arch.lifecycle:extensions:1.1.1'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

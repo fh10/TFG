@@ -1,4 +1,4 @@
-package id.aashari.code.miband2;
+package id.oscar.code.miband3;
 
 import org.junit.Test;
 

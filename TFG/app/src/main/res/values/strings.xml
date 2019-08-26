@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MiBand2</string>
+    <string name="app_name">Sport4U</string>
 
     <string name="ble_not_supported">BLE is not supported</string>
     <string name="label_data">Data:</string>
@@ -20,4 +20,18 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
+    <string name="title_activity_login">Iniciar Sesion</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="usuario">usuario</string>
+    <string name="Iniciar_Sesion">Iniciar Sesion</string>
+    <string name="Login">Login</string>
+    <string name="password">password</string>
+    <string name="confirm_password">confirmar password</string>
 </resources>

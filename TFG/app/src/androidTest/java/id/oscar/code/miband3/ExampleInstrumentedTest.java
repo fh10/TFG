@@ -1,4 +1,4 @@
-package id.aashari.code.miband2;
+package id.oscar.code.miband3;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("id.aashari.code.miband2", appContext.getPackageName());
+        assertEquals("id.oscar.code.miband3", appContext.getPackageName());
     }
 }

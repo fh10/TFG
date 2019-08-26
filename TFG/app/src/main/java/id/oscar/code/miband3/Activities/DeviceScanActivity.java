@@ -1,4 +1,4 @@
-package id.aashari.code.miband2.Activities;
+package id.oscar.code.miband3.Activities;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import id.aashari.code.miband2.R;
+import id.oscar.code.miband3.R;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.

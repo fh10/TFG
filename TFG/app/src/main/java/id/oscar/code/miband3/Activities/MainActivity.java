@@ -1,4 +1,4 @@
-package id.aashari.code.miband2.Activities;
+package id.oscar.code.miband3.Activities;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -23,12 +23,13 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Set;
+import java.lang.Object;
 
-import id.aashari.code.miband2.Helpers.CustomBluetoothProfile;
-import id.aashari.code.miband2.R;
+import id.oscar.code.miband3.Activities.ui.login.LoginActivity;
+import id.oscar.code.miband3.Helpers.CustomBluetoothProfile;
+import id.oscar.code.miband3.R;
 
 public class MainActivity extends Activity {
-
 
     Boolean isListeningHeartRate = false;
 
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
     BluetoothGatt bluetoothGatt;
     BluetoothDevice bluetoothDevice;
 
-    Button btnStartConnecting, btnGetBatteryInfo, btnGetHeartRate, btnWalkingInfo, btnStartVibrate, btnStopVibrate;
+    Button btnStartConnecting, btnGetBatteryInfo, btnGetHeartRate, btnWalkingInfo, btnStartVibrate, btnStopVibrate, btnSendNotification;
     EditText txtPhysicalAddress;
     TextView txtState, txtByte;
     private String mDeviceName;
@@ -66,7 +67,7 @@ public class MainActivity extends Activity {
 
         Set<BluetoothDevice> boundedDevice = bluetoothAdapter.getBondedDevices();
         for (BluetoothDevice bd : boundedDevice) {
-            if (bd.getName().contains("MI Band 3")) {
+            if (bd.getName().contains("Mi Band 3")) {
                 txtPhysicalAddress.setText(bd.getAddress());
             }
         }
@@ -86,6 +87,7 @@ public class MainActivity extends Activity {
         txtPhysicalAddress = (EditText) findViewById(R.id.txtPhysicalAddress);
         txtState = (TextView) findViewById(R.id.txtState);
         txtByte = (TextView) findViewById(R.id.txtByte);
+        btnSendNotification = (Button) findViewById(R.id.btnSendNotification);
     }
 
     void initializeEvents() {
@@ -117,6 +119,12 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startScanHeartRate();
+            }
+        });
+        btnSendNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSteps();
             }
         });
     }
@@ -169,7 +177,16 @@ public class MainActivity extends Activity {
         if (!bluetoothGatt.readCharacteristic(bchar)) {
             Toast.makeText(this, "Failed get battery info", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    void getSteps() {
+        txtByte.setText("...");
+        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.Basic.service)
+                .getCharacteristic(CustomBluetoothProfile.Basic.stepsCharacteristic);
+        //bchar.setValue(new byte[]{21, 2, 1});
+        if (!bluetoothGatt.readCharacteristic(bchar)) {
+            Toast.makeText(this, "Failed get battery info", Toast.LENGTH_SHORT).show();
+        }
     }
 
     void startVibrate() {
@@ -217,7 +234,19 @@ public class MainActivity extends Activity {
             super.onCharacteristicRead(gatt, characteristic, status);
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
-            txtByte.setText(Arrays.toString(data));
+            //txtByte.setText(Arrays.toString(data));
+            int steps = 0xff & data[1] | (0xff & data[2]) << 8;
+            short pasos= (short) steps;
+            int distanza = ((((data[5] & 255) | ((data[6] & 255) << 8)) | (data[7] & 16711680)) | ((data[8] & 255) << 24));
+            short distancia= (short) distanza;
+            int calorie = ((((data[9] & 255) | ((data[10] & 255) << 8)) | (data[11] & 16711680)) | ((data[12] & 255) << 24));
+            short calorias = (short) calorie;
+
+            txtByte.setText("Pasos = " + Short.toString(pasos) + ", distancia = " + Short.toString(distancia) + ", calorias = " + Short.toString(calorias));
+            Intent login = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(login);
+            //txtByte.setText(Integer.toString(steps));
+
         }
 
         @Override
