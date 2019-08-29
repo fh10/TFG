@@ -14,18 +14,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.RegistryActivity"></activity>
+        <activity android:name=".Activities.CaminoAlExito"></activity>
+        <activity android:name=".Activities.HistoricoActivity" />
+        <activity android:name=".Activities.HomeActivity" />
+        <activity
+            android:name=".bottomNavbarActivity"
+            android:label="@string/title_activity_bottom_navbar" />
+        <activity
+            android:name=".Activities.RegistryActivity"
+            android:label="@string/title_activity_registrar" />
         <activity
             android:name=".Activities.ui.login.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".Activities.DeviceScanActivity">
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.DeviceScanActivity" />
 
         <meta-data xmlns:tools="http://schemas.android.com/tools"
             android:name="android.support.VERSION"

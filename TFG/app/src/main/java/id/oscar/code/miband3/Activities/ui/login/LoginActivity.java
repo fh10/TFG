@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import id.oscar.code.miband3.Activities.HomeActivity;
 import id.oscar.code.miband3.Activities.MainActivity;
 import id.oscar.code.miband3.Activities.RegistryActivity;
 import id.oscar.code.miband3.Helpers.DatabaseHelper;
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
+               /* if (loginFormState == null) {
                     return;
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
@@ -65,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginFormState.getPasswordError() != null) {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
+                }*/
             }
         });
 
@@ -128,17 +129,26 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());*/
                 String user = usernameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
-                Boolean logged = db.checkUser(user,password);
 
-                if(logged)
+                if(!user.isEmpty() && !password.isEmpty())
                 {
-                    Intent home = new Intent(LoginActivity.this, MainActivity.class);
-                    Toast.makeText(LoginActivity.this,"Bienvenido",Toast.LENGTH_SHORT).show();
-                    startActivity(home);
+                    boolean logged = db.checkUser(user,password);
+
+                    if(logged)
+                    {
+                        Intent home = new Intent(LoginActivity.this, HomeActivity.class);
+                        home.putExtra("username",user);
+                        Toast.makeText(LoginActivity.this,"Bienvenido " + user,Toast.LENGTH_SHORT).show();
+                        startActivity(home);
+                    }
+                    else
+                    {
+                        Toast.makeText(LoginActivity.this,"Error",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this,"Error",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,"Rellena todos los campos",Toast.LENGTH_SHORT).show();
                 }
             }
         });

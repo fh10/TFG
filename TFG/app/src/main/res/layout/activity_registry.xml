@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,10 +10,22 @@
     tools:context=".Activities.RegistryActivity">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="136dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="298dp"
+        android:layout_height="172dp"
+        android:layout_marginTop="15dp"
         app:srcCompat="@drawable/logo" />
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/scrollView"
+      android:layout_gravity="center_vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="110dp">
 
     <EditText
         android:id="@+id/edittext_nombre"
@@ -33,6 +46,14 @@
         android:background="#ffffff"
         android:drawableLeft="@drawable/username"
         android:hint="Apellidos"/>
+  <EditText
+      android:id="@+id/edittext_sexo"
+      android:layout_width="206dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:paddingLeft="2dp"
+      android:background="#ffffff"
+      android:hint="Sexo"/>
 
     <EditText
         android:id="@+id/edittext_fecha_nac"
@@ -41,7 +62,27 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="2dp"
         android:background="#ffffff"
+        android:inputType="date"
+        android:focusable="false"
         android:hint="Fecha nacimiento"/>
+
+  <EditText
+      android:id="@+id/edittext_peso"
+      android:layout_width="206dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:paddingLeft="2dp"
+      android:background="#ffffff"
+      android:hint="Peso (En kg)"/>
+
+  <EditText
+      android:id="@+id/edittext_altura"
+      android:layout_width="206dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="10dp"
+      android:paddingLeft="2dp"
+      android:background="#ffffff"
+      android:hint="Altura (en metros)"/>
 
     <EditText
         android:id="@+id/edittext_username"
@@ -103,5 +144,7 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+    </LinearLayout>
+  </ScrollView>
 
 </LinearLayout>

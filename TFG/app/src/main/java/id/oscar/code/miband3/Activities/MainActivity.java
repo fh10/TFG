@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Set;
 import java.lang.Object;
@@ -44,7 +45,6 @@ public class MainActivity extends Activity {
     TextView txtState, txtByte;
     private String mDeviceName;
     private String mDeviceAddress;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +207,38 @@ public class MainActivity extends Activity {
         }
     }
 
+    void sendNotification ()
+    {
+        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.AlertNotification.service)
+                .getCharacteristic(CustomBluetoothProfile.AlertNotification.alertCharacteristic);
+
+        byte notif = 5;
+        byte alert = 1;
+        byte[] mensaje;
+        byte [] parametros;
+        byte[] bytes;
+
+        String value = "Ejemplo";
+
+        parametros=new byte[]{notif,alert};
+        bytes = value.getBytes(StandardCharsets.US_ASCII);
+        mensaje= unitBytes(parametros,bytes);
+
+        Log.v("TEST",new String(bytes));
+
+        bchar.setValue(mensaje);
+        bluetoothGatt.writeCharacteristic(bchar);
+    }
+
+    public byte[] unitBytes(byte[] a, byte[] b){
+
+        byte[] mensaje= new byte[a.length+b.length];
+        System.arraycopy(a,0,mensaje,0,a.length);
+        System.arraycopy(b,0,mensaje,a.length,b.length);
+
+        return mensaje;
+    }
+
     final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
 
         @Override
@@ -234,6 +266,7 @@ public class MainActivity extends Activity {
             super.onCharacteristicRead(gatt, characteristic, status);
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
+
             //txtByte.setText(Arrays.toString(data));
             int steps = 0xff & data[1] | (0xff & data[2]) << 8;
             short pasos= (short) steps;
