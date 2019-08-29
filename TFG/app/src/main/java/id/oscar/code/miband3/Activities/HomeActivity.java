@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,39 +27,13 @@ public class HomeActivity extends AppCompatActivity {
     TextView imc;
     TextView peso;
     EditText nivel;
+    EditText nivelSiguiente;
     DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Intent home = new Intent(HomeActivity.this, HomeActivity.class);
-                        startActivity(home);
-                        return true;
-                /*case R.id.camino_al_exito:
-                    Intent ce = new Intent(bottomNavbarActivity.this, CaminoAlExito.class);
-                    startActivity(ce);
-                    return true;*/
-                    case R.id.historico:
-                        Intent his = new Intent(HomeActivity.this, HistoricoActivity.class);
-                        startActivity(his);
-                        return true;
-                /*case R.id.perfil:
-                    Intent perfil = new Intent(bottomNavbarActivity.this, Perfil.class);
-                    startActivity(perfil);
-                    return true;*/
-                }
-                return false;
-            }
-        };
 
         db = new DatabaseHelper(this);
         pasos = (TextView) findViewById(R.id.pasos_realizados);
@@ -67,12 +42,20 @@ public class HomeActivity extends AppCompatActivity {
         imc = (TextView) findViewById(R.id.imc);
         peso = (TextView) findViewById(R.id.peso);
         nivel = (EditText) findViewById(R.id.colorNivel);
+        nivelSiguiente = (EditText) findViewById(R.id.colorNivelSiguiente);
 
         Usuario user = db.getUser(getIntent().getExtras().getString("username"));
         Calendar fecha = Calendar.getInstance();
 
-        String fechaEjercicio= Integer.toString(fecha.get(Calendar.DATE)) + "/" + Integer.toString(fecha.get(Calendar.MONTH)) +  "/" +Integer.toString(fecha.get(Calendar.YEAR));
         Cursor cursor = db.historicoEjercicios(String.valueOf(user.getId()));
+
+        nivel.setGravity(Gravity.CENTER);
+        String aux = "Desafio " + (user.getNivel()+1);
+        nivel.setText(aux);
+
+        nivelSiguiente.setGravity(Gravity.CENTER);
+        aux = "Desafio " + (user.getNivel()+2);
+        nivelSiguiente.setText(aux);
 
         if(user.getNivel()> 7)
         {
@@ -83,29 +66,68 @@ public class HomeActivity extends AppCompatActivity {
             nivel.setBackgroundColor(0xcc9900);
         }
 
-        String aux = peso.getText().toString() + " " + user.getPeso();
+        if(user.getNivel() +1> 7)
+        {
+            nivel.setBackgroundColor(0xB2B6BA);
+        }
+        else if(user.getNivel() +1>17)
+        {
+            nivel.setBackgroundColor(0xcc9900);
+        }
+
+        aux = peso.getText().toString() + " " + user.getPeso() + "Kg";
         peso.setText(aux);
 
         float valorIMC = user.getPeso()/(user.getAltura()*user.getAltura());
-        aux = imc.getText().toString() + " " + valorIMC;
+        aux = imc.getText().toString() + " " + valorIMC + "Kg/m2";
         imc.setText(aux);
 
         if (cursor.moveToFirst()) {
             aux = pasos.getText().toString() + " " + cursor.getString(3);
             pasos.setText(aux);
-            aux = distancia.getText().toString() + " " + cursor.getString(5);
+            aux = distancia.getText().toString() + " " + cursor.getString(5) + " m";
             distancia.setText(aux);
-            aux = calorias.getText().toString() + " " + cursor.getString(4);
+            aux = calorias.getText().toString() + " " + cursor.getString(4) + " cal";
             calorias.setText(aux);
         }
         else
         {
             aux = pasos.getText().toString() + "0";
             pasos.setText(aux);
-            aux = pasos.getText().toString() + "0";
+            aux = distancia.getText().toString() + "0 metros";
             distancia.setText(aux);
-            aux = pasos.getText().toString() + "0";
+            aux = calorias.getText().toString() + "0 cal";
             calorias.setText(aux);
         }
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        /*Intent home = new Intent(HomeActivity.this, HomeActivity.class);
+                        startActivity(home);*/
+                        return true;
+                    case R.id.camino_al_exito:
+                        Intent ce = new Intent(HomeActivity.this, CaminoAlExito.class);
+                        ce.putExtra("username",getIntent().getExtras().getString("username"));
+                        startActivity(ce);
+                        return true;
+                    case R.id.historico:
+                        Intent his = new Intent(HomeActivity.this, HistoricoActivity.class);
+                        his.putExtra("username",getIntent().getExtras().getString("username"));
+                        startActivity(his);
+                        return true;
+                /*case R.id.perfil:
+                    Intent perfil = new Intent(bottomNavbarActivity.this, Perfil.class);
+                    startActivity(perfil);
+                    return true;*/
+                }
+                return false;
+            }
+        });
+        navigation.setSelectedItemId(R.id.navigation_home);
     }
 }

@@ -43,9 +43,9 @@
     <string name="Historico">Histórico</string>
     <string name="Fecha">Fecha</string>
     <string name="Pasos">Pasos</string>
-    <string name="Distancia">Distancia</string>
-    <string name="Calorias">Calorias</string>
-    <string name="pasos_realizados">Pasos_realizados:</string>
+    <string name="Distancia">Distancia (m)</string>
+    <string name="Calorias">Calorias (cal)</string>
+    <string name="pasos_realizados">Pasos realizados:</string>
     <string name="distancia_recorrida">Distancia recorrida:</string>
     <string name="calorias_quemadas">Calorias quemadas:</string>
     <string name="estado_actual">Estado actual</string>
@@ -58,4 +58,10 @@
     <string name="no_tienes_cuenta">No tienes cuenta?</string>
     <string name="registrate">Registrate!</string>
     <string name="title_activity_registrar">Registro</string>
+    <string name="a_por_el">A POR ÉL!</string>
+    <string name="completado_exclamacion">COMPLETADO!</string>
+    <string name="foto_del_estado">Foto del estado</string>
+    <string name="foto_del_ultimo_entreno">Foto del ultimo entreno</string>
+    <string name="proximoObjetivo">Próximo objetivo</string>
+    <string name="tu_puedes">!TÚ PUEDES!</string>
 </resources>
