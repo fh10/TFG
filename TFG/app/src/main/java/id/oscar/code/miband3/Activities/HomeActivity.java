@@ -45,7 +45,10 @@ public class HomeActivity extends AppCompatActivity {
         nivelSiguiente = (EditText) findViewById(R.id.colorNivelSiguiente);
 
         Usuario user = db.getUser(getIntent().getExtras().getString("username"));
-        Calendar fecha = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
+
+        String fechaHoy = cal.get(Calendar.DAY_OF_MONTH) + "/" +cal.get(Calendar.MONTH)+ "/" + cal.get(Calendar.YEAR);
+        db.addEjercicio(user.getId(), user.getUsername(), fechaHoy, 1, 1,1);
 
         Cursor cursor = db.historicoEjercicios(String.valueOf(user.getId()));
 

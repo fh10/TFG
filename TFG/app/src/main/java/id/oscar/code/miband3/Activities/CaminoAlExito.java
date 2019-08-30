@@ -123,7 +123,7 @@ public class CaminoAlExito extends AppCompatActivity {
             int posicion = Integer.parseInt(this.desafios.get(position));
             int aux = posicion++;
 
-            String nombreText = "Desafio " + aux;
+            String nombreText = "DesafioActivity " + aux;
 
             nombre.setText(nombreText);
 

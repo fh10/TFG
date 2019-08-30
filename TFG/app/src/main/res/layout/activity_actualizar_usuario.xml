@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ActualizarUsuario">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        tools:context=".Activities.RegistryActivity">
+
+    <ImageView
+        android:layout_width="298dp"
+        android:layout_height="172dp"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/logo" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_gravity="center_vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="110dp">
+
+            <EditText
+                android:id="@+id/edittext_nombre"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:background="#ffffff"
+                android:drawableLeft="@drawable/username"
+                android:hint="Nombre"/>
+
+            <EditText
+                android:id="@+id/edittext_apellidos"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:background="#ffffff"
+                android:drawableLeft="@drawable/username"
+                android:hint="Apellidos"/>
+            <EditText
+                android:id="@+id/edittext_sexo"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:background="#ffffff"
+                android:hint="Sexo"/>
+
+            <EditText
+                android:id="@+id/edittext_fecha_nac"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:background="#ffffff"
+                android:inputType="date"
+                android:focusable="false"
+                android:hint="Fecha nacimiento"/>
+
+            <EditText
+                android:id="@+id/edittext_peso"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:background="#ffffff"
+                android:hint="Peso (En kg)"/>
+
+            <EditText
+                android:id="@+id/edittext_altura"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:background="#ffffff"
+                android:hint="Altura (en metros)"/>
+
+            <EditText
+                android:id="@+id/edittext_zancada"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="#ffffff"
+                android:hint="@string/zancada"/>
+
+            <EditText
+                android:id="@+id/edittext_username"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:background="#ffffff"
+                android:drawableLeft="@drawable/username"
+                android:hint="@string/usuario"/>
+
+            <EditText
+                android:id="@+id/edittext_password"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="#ffffff"
+                android:drawableLeft="@drawable/password"
+                android:hint="@string/password"/>
+
+            <EditText
+                android:id="@+id/edittext_cnf_password"
+                android:layout_width="206dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="#ffffff"
+                android:drawableLeft="@drawable/password"
+                android:hint="@string/confirm_password"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <Button
+                    android:id="@+id/button_actualizar"
+                    android:layout_width="109dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#04ea00"
+                    android:text="@string/actualizar"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    android:id="@+id/button_cancelar"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#04ea00"
+                    android:text="Cancelar"
+                    android:textColor="#ffffff" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

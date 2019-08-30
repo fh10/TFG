@@ -15,7 +15,7 @@ public class Usuario {
     private int calorias;
     private int recorrido;
     private int pasos;
-    private int zancada;
+    private float zancada;
 
     public int getId() {
         return id;
@@ -121,11 +121,11 @@ public class Usuario {
         this.pasos = pasos;
     }
 
-    public int getZancada() {
+    public float getZancada() {
         return zancada;
     }
 
-    public void setZancada(int zancada) {
+    public void setZancada(float zancada) {
         this.zancada = zancada;
     }
 }

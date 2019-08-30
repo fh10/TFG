@@ -1,20 +1,18 @@
 package id.oscar.code.miband3.Activities;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import java.text.NumberFormat;
@@ -22,12 +20,11 @@ import java.text.ParseException;
 import java.util.Calendar;
 
 import id.oscar.code.miband3.Activities.ui.login.LoginActivity;
-import id.oscar.code.miband3.Activities.ui.login.LoginViewModel;
 import id.oscar.code.miband3.Helpers.DatabaseHelper;
+import id.oscar.code.miband3.Helpers.Usuario;
 import id.oscar.code.miband3.R;
 
-public class RegistryActivity extends AppCompatActivity {
-
+public class ActualizarUsuario extends AppCompatActivity {
     EditText usernameEditText;
     EditText passwordEditText;
     EditText confirmPassword;
@@ -37,17 +34,20 @@ public class RegistryActivity extends AppCompatActivity {
     EditText sexoEditText;
     EditText alturaEditext;
     EditText pesoEditText;
-    Button registryButton;
+    EditText zancadaEditText;
+    Button actualizarButton;
+    Button cancelarButton;
     ProgressBar loadingProgressBar;
     TextView login;
     DatePickerDialog picker;
+    Usuario userActual;
     DatabaseHelper db;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registry);
+        setContentView(R.layout.activity_actualizar_usuario);
+
         db = new DatabaseHelper(this);
         usernameEditText = (EditText) findViewById(R.id.edittext_username);
         passwordEditText = (EditText) findViewById(R.id.edittext_password);
@@ -58,10 +58,37 @@ public class RegistryActivity extends AppCompatActivity {
         sexoEditText = (EditText) findViewById(R.id.edittext_sexo);
         pesoEditText = (EditText) findViewById(R.id.edittext_peso);
         alturaEditext = (EditText) findViewById(R.id.edittext_altura);
+        zancadaEditText = (EditText) findViewById(R.id.edittext_zancada);
         usernameEditText = (EditText) findViewById(R.id.edittext_username);
-        registryButton = (Button) findViewById(R.id.button_register);
+        actualizarButton = (Button) findViewById(R.id.button_actualizar);
+        cancelarButton = (Button) findViewById(R.id.button_cancelar);
+        userActual = db.getUser(getIntent().getStringExtra("username"));
+
+        nombreEditText.setText(userActual.getNombre());
+        apellidosEditText.setText(userActual.getApellidos());
+        usernameEditText.setText(userActual.getUsername());
+        fechaEditText.setText(userActual.getFecha_nac());
+
+        String aux = "";
+
+        if(userActual.getSexo() == 0)
+        {
+            aux = "Hombre";
+        }
+        else
+        {
+            aux = "Mujer";
+        }
+
+        sexoEditText.setText(aux);
+        aux = Float.toString(userActual.getPeso()) + " Kg";
+        pesoEditText.setText(aux);
+        aux = Float.toString(userActual.getAltura()) + " m";
+        alturaEditext.setText(aux);
+        aux = Float.toString(userActual.getZancada());
+        zancadaEditText.setText(aux);
+
         loadingProgressBar = (ProgressBar) findViewById(R.id.loading);
-        login = (TextView) findViewById(R.id.textview_login);
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
@@ -78,7 +105,7 @@ public class RegistryActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                /* loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());*/
-                Toast.makeText(RegistryActivity.this,"Debe ser mayor de 5 caracteres", Toast.LENGTH_LONG).show();
+                Toast.makeText(ActualizarUsuario.this,"Debe ser mayor de 5 caracteres", Toast.LENGTH_LONG).show();
             }
         };
 
@@ -95,7 +122,7 @@ public class RegistryActivity extends AppCompatActivity {
                 int year = cldr.get(Calendar.YEAR);
                 // date picker dialog
 
-                picker = new DatePickerDialog(RegistryActivity.this, R.style.Theme_AppCompat_Light_DialogWhenLarge,
+                picker = new DatePickerDialog(ActualizarUsuario.this, R.style.Theme_AppCompat_Light_DialogWhenLarge,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -103,10 +130,10 @@ public class RegistryActivity extends AppCompatActivity {
                             }
                         }, year, month, day);
                 picker.show();
-                }
+            }
         });
 
-        registryButton.setOnClickListener(new View.OnClickListener() {
+        actualizarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String user = usernameEditText.getText().toString().trim();
@@ -115,27 +142,29 @@ public class RegistryActivity extends AppCompatActivity {
                 String nombre = nombreEditText.getText().toString();
                 String apellidos = apellidosEditText.getText().toString();
                 String fecha = fechaEditText.getText().toString();
-                Float peso = -1f, altura = -1f;
+                Float peso = -1f, altura = -1f, zancada = -1f;
                 try {
                     peso = NumberFormat.getInstance().parse(pesoEditText.getText().toString()).floatValue();
                     peso = peso/10;
                     altura = NumberFormat.getInstance().parse(alturaEditext.getText().toString()).floatValue();
-                    altura = altura/10;
+                    altura = altura/100;
+                    zancada = NumberFormat.getInstance().parse(alturaEditext.getText().toString()).floatValue();
+                    zancada = zancada / 100;
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
                 int  sexo = -1;
 
-                if(user.isEmpty() || password.isEmpty() || password.length() < 5 || cnf_password.isEmpty() || nombre.isEmpty() || apellidos.isEmpty() || fecha.isEmpty() || peso < 0 || altura < 0)
+                if(user.isEmpty() || password.isEmpty() || password.length() < 5 || cnf_password.isEmpty() || nombre.isEmpty() || apellidos.isEmpty() || fecha.isEmpty() || peso < 0 || altura < 0 || zancada < 0)
                 {
-                    Toast.makeText(RegistryActivity.this,"Error en los datos introducidos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActualizarUsuario.this,"Error en los datos introducidos", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
                     if(!sexoEditText.getText().toString().toLowerCase().equals("hombre") && !sexoEditText.getText().toString().toLowerCase().equals("mujer"))
                     {
-                        Toast.makeText(RegistryActivity.this,"Escribe hombre o mujer", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActualizarUsuario.this,"Escribe hombre o mujer", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -150,21 +179,31 @@ public class RegistryActivity extends AppCompatActivity {
 
                         if(!password.equals(cnf_password))
                         {
-                            Toast.makeText(RegistryActivity.this,"Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActualizarUsuario.this,"Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
-                            Long registrado = db.addUser(user,password,nombre,apellidos,fecha, sexo, peso,altura);
+                            userActual.setUsername(user);
+                            userActual.setPassword(password);
+                            userActual.setNombre(nombre);
+                            userActual.setApellidos(apellidos);
+                            userActual.setFecha_nac(fecha);
+                            userActual.setSexo(sexo);
+                            userActual.setPeso(peso);
+                            userActual.setAltura(altura);
+                            userActual.setZancada(zancada);
+                            Long actualizado = db.actualizarUsuario(userActual);
 
-                            if(registrado != -1)
+                            if(actualizado != -1)
                             {
-                                Toast.makeText(RegistryActivity.this,"Registrado!", Toast.LENGTH_SHORT).show();
-                                Intent login = new Intent(RegistryActivity.this,LoginActivity.class);
-                                startActivity(login);
+                                Toast.makeText(ActualizarUsuario.this,"Actualizado!", Toast.LENGTH_SHORT).show();
+                                Intent perfil = new Intent(ActualizarUsuario.this, PerfilActivity.class);
+                                perfil.putExtra("username",userActual.getUsername());
+                                startActivity(perfil);
                             }
                             else
                             {
-                                Toast.makeText(RegistryActivity.this,"ERROR EN EL REGISTRO!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActualizarUsuario.this,"ERROR EN LA ACTUALIZACIÓN!", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -173,11 +212,12 @@ public class RegistryActivity extends AppCompatActivity {
             }
         });
 
-        login.setOnClickListener(new View.OnClickListener() {
+        cancelarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registryIntent = new Intent(RegistryActivity.this, LoginActivity.class);
-                startActivity(registryIntent);
+                Intent perfil = new Intent(ActualizarUsuario.this, PerfilActivity.class);
+                perfil.putExtra("username",userActual.getUsername());
+                startActivity(perfil);
             }
         });
     }

@@ -63,7 +63,7 @@
     <string name="foto_del_estado">Foto del estado</string>
     <string name="foto_del_ultimo_entreno">Foto del ultimo entreno</string>
     <string name="proximoObjetivo">Próximo objetivo</string>
-    <string name="tu_puedes">!TÚ PUEDES!</string>
+    <string name="tu_puedes">¡TÚ PUEDES!</string>
     <string name="nombre">Nombre:</string>
     <string name="distancia_total_recorrida">Distancia total recorrida:</string>
     <string name="pasos_totales_realizados">Pasos totales realizados:</string>
@@ -73,4 +73,6 @@
     <string name="fecha_de_nacimiento">Fecha de nacimiento:</string>
     <string name="sexo">Sexo:</string>
     <string name="modificar">Modificar</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="zancada">Zancada</string>
 </resources>
