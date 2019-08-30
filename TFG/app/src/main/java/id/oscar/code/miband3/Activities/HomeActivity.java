@@ -68,11 +68,11 @@ public class HomeActivity extends AppCompatActivity {
 
         if(user.getNivel() +1> 7)
         {
-            nivel.setBackgroundColor(0xB2B6BA);
+            nivelSiguiente.setBackgroundColor(0xB2B6BA);
         }
         else if(user.getNivel() +1>17)
         {
-            nivel.setBackgroundColor(0xcc9900);
+            nivelSiguiente.setBackgroundColor(0xcc9900);
         }
 
         aux = peso.getText().toString() + " " + user.getPeso() + "Kg";
@@ -120,10 +120,11 @@ public class HomeActivity extends AppCompatActivity {
                         his.putExtra("username",getIntent().getExtras().getString("username"));
                         startActivity(his);
                         return true;
-                /*case R.id.perfil:
-                    Intent perfil = new Intent(bottomNavbarActivity.this, Perfil.class);
+                case R.id.perfil:
+                    Intent perfil = new Intent(HomeActivity.this, PerfilActivity.class);
+                    perfil.putExtra("username",getIntent().getExtras().getString("username"));
                     startActivity(perfil);
-                    return true;*/
+                    return true;
                 }
                 return false;
             }

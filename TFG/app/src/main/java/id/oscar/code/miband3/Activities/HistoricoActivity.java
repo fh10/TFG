@@ -1,6 +1,7 @@
 package id.oscar.code.miband3.Activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -14,17 +15,24 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
+import id.oscar.code.miband3.Helpers.DatabaseHelper;
+import id.oscar.code.miband3.Helpers.Usuario;
 import id.oscar.code.miband3.R;
 
 public class HistoricoActivity extends AppCompatActivity {
 
     TableLayout tabla;
     TextView fechaEdit;
+    DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historico);
+
+        db = new DatabaseHelper(this);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -46,10 +54,11 @@ public class HistoricoActivity extends AppCompatActivity {
                        /* Intent his = new Intent(HomeActivity.this, HistoricoActivity.class);
                         startActivity(his);*/
                         return true;
-                /*case R.id.perfil:
-                    Intent perfil = new Intent(bottomNavbarActivity.this, Perfil.class);
+                case R.id.perfil:
+                    Intent perfil = new Intent(HistoricoActivity.this, PerfilActivity.class);
+                    perfil.putExtra("username",getIntent().getExtras().getString("username"));
                     startActivity(perfil);
-                    return true;*/
+                    return true;
                 }
                 return false;
             }
@@ -60,6 +69,10 @@ public class HistoricoActivity extends AppCompatActivity {
 
         fechaEdit = (TextView) findViewById(R.id.fecha);
         fechaEdit.setBackgroundColor(0x76FB5E);
+
+        Usuario user = db.getUser(getIntent().getExtras().getString("username"));
+
+        Cursor cursor = db.historicoEjercicios(String.valueOf(user.getId()));
 
         TableRow row = new TableRow(this);
         TableRow row2 = new TableRow(this);

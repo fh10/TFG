@@ -101,7 +101,7 @@
         android:layout_marginTop="28dp"
         android:drawableStart="@drawable/peso"
         android:fontFamily="sans-serif-medium"
-        android:text="@string/peso"
+        android:text="@string/Peso"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
