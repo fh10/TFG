@@ -281,8 +281,17 @@
         android:text="@string/modificar"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.923"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
         app:layout_constraintVertical_bias="0.989" />
+
+    <Button
+        android:id="@+id/button_conectar"
+        android:layout_width="176dp"
+        android:layout_height="37dp"
+        android:text="Conectar pulsera"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="585dp" />
 
 </android.support.constraint.ConstraintLayout>

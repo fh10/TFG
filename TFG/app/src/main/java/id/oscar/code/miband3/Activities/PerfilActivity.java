@@ -27,6 +27,7 @@ public class PerfilActivity extends AppCompatActivity {
     TextView calorias;
     EditText nivel;
     Button modificarButton;
+    Button pulsera;
     Usuario user;
     DatabaseHelper db;
 
@@ -46,6 +47,7 @@ public class PerfilActivity extends AppCompatActivity {
         calorias = (TextView) findViewById(R.id.Calorias_totales_quemadas);
         nivel = (EditText) findViewById(R.id.colorNivel);
         modificarButton = (Button) findViewById(R.id.buttonModificar);
+        pulsera = (Button) findViewById(R.id.button_conectar);
 
         user = db.getUser(getIntent().getExtras().getString("username"));
 
@@ -95,6 +97,14 @@ public class PerfilActivity extends AppCompatActivity {
                 Intent actualizar = new Intent(PerfilActivity.this, ActualizarUsuario.class);
                 actualizar.putExtra("username",user.getUsername());
                 startActivity(actualizar);
+            }
+        });
+
+        pulsera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent pulsera = new Intent(PerfilActivity.this,DeviceScanActivity.class);
+               startActivity(pulsera);
             }
         });
     }
