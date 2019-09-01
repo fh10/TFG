@@ -1,9 +1,12 @@
 package id.oscar.code.miband3.Activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -36,6 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         db = new DatabaseHelper(this);
+        //db.anyadir_Descripciones();
         pasos = (TextView) findViewById(R.id.pasos_realizados);
         distancia = (TextView) findViewById(R.id.distancia_recorrida);
         calorias = (TextView) findViewById(R.id.calorias_quemadas);
@@ -45,10 +49,6 @@ public class HomeActivity extends AppCompatActivity {
         nivelSiguiente = (EditText) findViewById(R.id.colorNivelSiguiente);
 
         Usuario user = db.getUser(getIntent().getExtras().getString("username"));
-        Calendar cal = Calendar.getInstance();
-
-        String fechaHoy = cal.get(Calendar.DAY_OF_MONTH) + "/" +cal.get(Calendar.MONTH)+ "/" + cal.get(Calendar.YEAR);
-        db.addEjercicio(user.getId(), user.getUsername(), fechaHoy, 1, 1,1);
 
         Cursor cursor = db.historicoEjercicios(String.valueOf(user.getId()));
 
@@ -103,6 +103,22 @@ public class HomeActivity extends AppCompatActivity {
             calorias.setText(aux);
         }
 
+        if(getIntent().getExtras().getString("nombreDispositivo") == null || getIntent().getExtras().getString("direccionDispositivo")  == null) {
+            AlertDialog alertDialog = new AlertDialog.Builder(HomeActivity.this).create();
+            alertDialog.setTitle("Alerta");
+            alertDialog.setMessage("No se ha encontrado ninguna pulsera conectada. Conecta tu pulsera.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ir a escanear pulseras",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent ce = new Intent(HomeActivity.this, DeviceScanActivity.class);
+                            ce.putExtra("username", getIntent().getExtras().getString("username"));
+                            startActivity(ce);
+                            }
+                    });
+            alertDialog.show();
+        }
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -116,16 +132,22 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.camino_al_exito:
                         Intent ce = new Intent(HomeActivity.this, CaminoAlExito.class);
                         ce.putExtra("username",getIntent().getExtras().getString("username"));
+                        ce.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        ce.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(ce);
                         return true;
                     case R.id.historico:
                         Intent his = new Intent(HomeActivity.this, HistoricoActivity.class);
                         his.putExtra("username",getIntent().getExtras().getString("username"));
+                        his.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        his.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(his);
                         return true;
                 case R.id.perfil:
                     Intent perfil = new Intent(HomeActivity.this, PerfilActivity.class);
                     perfil.putExtra("username",getIntent().getExtras().getString("username"));
+                    perfil.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                    perfil.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                     startActivity(perfil);
                     return true;
                 }

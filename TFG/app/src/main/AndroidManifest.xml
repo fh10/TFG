@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.DesafioActivity"></activity>
+        <activity android:name=".Activities.DesafiosActivity"></activity>
+        <activity android:name=".Activities.DesafioActivity" />
         <activity android:name=".Activities.ActualizarUsuario" />
         <activity android:name=".Activities.PerfilActivity" />
         <activity android:name=".Activities.CaminoAlExito" />

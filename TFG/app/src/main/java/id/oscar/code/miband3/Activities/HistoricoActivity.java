@@ -38,11 +38,15 @@ public class HistoricoActivity extends AppCompatActivity {
                     case R.id.navigation_home:
                         Intent home = new Intent(HistoricoActivity.this, HomeActivity.class);
                         home.putExtra("username",getIntent().getExtras().getString("username"));
+                        home.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        home.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(home);
                         return true;
                     case R.id.camino_al_exito:
                         Intent ce = new Intent(HistoricoActivity.this, CaminoAlExito.class);
                         ce.putExtra("username",getIntent().getExtras().getString("username"));
+                        ce.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        ce.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(ce);
                         return true;
                     case R.id.historico:

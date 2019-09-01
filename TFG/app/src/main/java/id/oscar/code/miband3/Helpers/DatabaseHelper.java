@@ -10,7 +10,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME ="database.db";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null,4 );
+        super(context, DATABASE_NAME, null,5 );
     }
 
     @Override
@@ -26,7 +26,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS usuarios");
         sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS historico");
         sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS imagenes");
-
         onCreate(sqLiteDatabase);
     }
 
@@ -145,6 +144,19 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         cursor.close();
         db.close();
         return user;
+    }
+
+    public String getDescripcion(String nombre)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        String selection = "nombre=?";
+        String[] selectionArgs = { nombre };
+        Cursor cursor = db.query("imagenes",null,selection,selectionArgs,null,null,null);
+        cursor.moveToFirst();
+        String descripcion = cursor.getString(2);
+        cursor.close();
+        db.close();
+        return descripcion;
     }
 
     public Cursor historicoEjercicios(String user)

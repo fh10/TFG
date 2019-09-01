@@ -128,6 +128,7 @@ public class DeviceScanActivity extends AppCompatActivity {
                 final Intent intent = new Intent(DeviceScanActivity.this, MainActivity.class);
                 intent.putExtra(MainActivity.EXTRAS_DEVICE_NAME, device.getName());
                 intent.putExtra(MainActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+                intent.putExtra("username",getIntent().getStringExtra("username"));
                 intent.putExtra("device", device);
                 if (mScanning) {
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);

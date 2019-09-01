@@ -40,15 +40,19 @@ public class MainActivity extends Activity {
     BluetoothGatt bluetoothGatt;
     BluetoothDevice bluetoothDevice;
 
-    Button btnStartConnecting, btnGetBatteryInfo, btnGetHeartRate, btnWalkingInfo, btnStartVibrate, btnStopVibrate, btnSendNotification;
+    Button btnStartConnecting, btnGetBatteryInfo, btnGetHeartRate, btnStartVibrate, btnStopVibrate, btnProbarPasos, btnAceptar;
     EditText txtPhysicalAddress;
     TextView txtState, txtByte;
     private String mDeviceName;
     private String mDeviceAddress;
+    public short pasos;
+    public short distancia;
+    public short calorias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         initializeObjects();
@@ -61,8 +65,11 @@ public class MainActivity extends Activity {
 
     void getBoundedDevice() {
 
-        mDeviceName = getIntent().getStringExtra(EXTRAS_DEVICE_NAME);
-        mDeviceAddress = getIntent().getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        if(mDeviceAddress.isEmpty() && mDeviceName.isEmpty())
+        {
+            mDeviceName = getIntent().getStringExtra(EXTRAS_DEVICE_NAME);
+            mDeviceAddress = getIntent().getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        }
         txtPhysicalAddress.setText(mDeviceAddress);
 
         Set<BluetoothDevice> boundedDevice = bluetoothAdapter.getBondedDevices();
@@ -73,21 +80,29 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void setmDeviceName(String mDeviceName) {
+        this.mDeviceName = mDeviceName;
+    }
+
+    public void setmDeviceAddress(String mDeviceAddress) {
+        this.mDeviceAddress = mDeviceAddress;
+    }
+
     void initializeObjects() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     void initilaizeComponents() {
         btnStartConnecting = (Button) findViewById(R.id.btnStartConnecting);
-        btnGetBatteryInfo = (Button) findViewById(R.id.btnGetBatteryInfo);
-        btnWalkingInfo = (Button) findViewById(R.id.btnWalkingInfo);
         btnStartVibrate = (Button) findViewById(R.id.btnStartVibrate);
         btnStopVibrate = (Button) findViewById(R.id.btnStopVibrate);
-        btnGetHeartRate = (Button) findViewById(R.id.btnGetHeartRate);
         txtPhysicalAddress = (EditText) findViewById(R.id.txtPhysicalAddress);
         txtState = (TextView) findViewById(R.id.txtState);
         txtByte = (TextView) findViewById(R.id.txtByte);
-        btnSendNotification = (Button) findViewById(R.id.btnSendNotification);
+        btnProbarPasos = (Button) findViewById(R.id.btnSendNotification);
+        btnAceptar = (Button) findViewById(R.id.button2);
+        mDeviceName = "";
+        mDeviceAddress = "";
     }
 
     void initializeEvents() {
@@ -95,12 +110,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startConnecting();
-            }
-        });
-        btnGetBatteryInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getBatteryStatus();
             }
         });
         btnStartVibrate.setOnClickListener(new View.OnClickListener() {
@@ -115,23 +124,28 @@ public class MainActivity extends Activity {
                 stopVibrate();
             }
         });
-        btnGetHeartRate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startScanHeartRate();
-            }
-        });
-        btnSendNotification.setOnClickListener(new View.OnClickListener() {
+        btnProbarPasos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getSteps();
+            }
+        });
+
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home  = new Intent(MainActivity.this,HomeActivity.class);
+                home.putExtra("username",getIntent().getExtras().getString("username"));
+                home.putExtra("nombreDispositivo",mDeviceName);
+                home.putExtra("direccionDispositivo",mDeviceAddress);
+                startActivity(home);
             }
         });
     }
 
     void startConnecting() {
 
-        String address = txtPhysicalAddress.getText().toString();
+        String address = mDeviceAddress;
         bluetoothDevice = bluetoothAdapter.getRemoteDevice(address);
 
         Log.v("test", "Connecting to " + address);
@@ -143,6 +157,7 @@ public class MainActivity extends Activity {
 
     void stateConnected() {
         bluetoothGatt.discoverServices();
+
         txtState.setText("Connected");
     }
 
@@ -183,7 +198,7 @@ public class MainActivity extends Activity {
         txtByte.setText("...");
         BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.Basic.service)
                 .getCharacteristic(CustomBluetoothProfile.Basic.stepsCharacteristic);
-        //bchar.setValue(new byte[]{21, 2, 1});
+        bchar.setValue(new byte[]{21, 2, 1});
         if (!bluetoothGatt.readCharacteristic(bchar)) {
             Toast.makeText(this, "Failed get battery info", Toast.LENGTH_SHORT).show();
         }
@@ -267,20 +282,35 @@ public class MainActivity extends Activity {
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
 
-            //txtByte.setText(Arrays.toString(data));
+            txtByte.setText(Arrays.toString(data));
             int steps = 0xff & data[1] | (0xff & data[2]) << 8;
-            short pasos= (short) steps;
+            pasos= (short) steps;
             int distanza = ((((data[5] & 255) | ((data[6] & 255) << 8)) | (data[7] & 16711680)) | ((data[8] & 255) << 24));
-            short distancia= (short) distanza;
+            distancia= (short) distanza;
             int calorie = ((((data[9] & 255) | ((data[10] & 255) << 8)) | (data[11] & 16711680)) | ((data[12] & 255) << 24));
-            short calorias = (short) calorie;
+            calorias = (short) calorie;
 
             txtByte.setText("Pasos = " + Short.toString(pasos) + ", distancia = " + Short.toString(distancia) + ", calorias = " + Short.toString(calorias));
-            Intent login = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(login);
+           /* Intent login = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(login);*/
             //txtByte.setText(Integer.toString(steps));
-
         }
+
+        public short getPasos()
+        {
+            return pasos;
+        }
+
+        public short getDistancia()
+        {
+            return distancia;
+        }
+
+        public short getCalorias()
+        {
+            return calorias;
+        }
+
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {

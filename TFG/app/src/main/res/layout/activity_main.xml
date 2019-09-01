@@ -17,12 +17,14 @@
             android:id="@+id/txtPhysicalAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:hint="Physical Address" />
 
         <Button
             android:id="@+id/btnStartConnecting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Start Connecting" />
 
     </LinearLayout>
@@ -31,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="20dp"
         android:paddingTop="20dp">
 
         <LinearLayout
@@ -43,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
-                android:text="State:"
+                android:text="Estado de la pulsera:"
                 android:textStyle="bold" />
 
             <TextView
@@ -58,35 +61,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="106dp"
-        android:orientation="horizontal"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
-
-        <Button
-            android:id="@+id/btnGetBatteryInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:text="Battery Info" />
-
-        <Button
-            android:id="@+id/btnGetHeartRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:text="Heart Rate" />
-
-        <Button
-            android:id="@+id/btnWalkingInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:text="Walking Info" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingBottom="20dp"
@@ -97,14 +71,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:text="Start Vibrate" />
+            android:text="Probar vibración" />
 
         <Button
             android:id="@+id/btnStopVibrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:text="Stop Vibrate" />
+            android:text="Parar vibración" />
     </LinearLayout>
 
 
@@ -117,7 +91,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Byte Received:"
+            android:text="Información recibida:"
             android:textStyle="bold" />
 
         <TextView
@@ -130,7 +104,14 @@
             android:id="@+id/btnSendNotification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calcular pasos" />
+            android:text="Probar calculo estadísticas" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Aceptar" />
 
 </LinearLayout>

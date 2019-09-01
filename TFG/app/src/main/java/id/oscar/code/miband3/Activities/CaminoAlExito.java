@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,12 +27,13 @@ public class CaminoAlExito extends AppCompatActivity {
     ListView camino;
     DatabaseHelper db;
     int nivelUsuario;
+    ItemAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camino_al_exito);
-        camino = (ListView) findViewById(R.id.listView);
+        camino = (ListView) findViewById(R.id.listaCamino);
 
         db = new DatabaseHelper(this);
         Usuario user = db.getUser(getIntent().getExtras().getString("username"));
@@ -43,7 +45,20 @@ public class CaminoAlExito extends AppCompatActivity {
             desafios.add(Integer.toString(i));
         }
 
-        this.camino.setAdapter(new ItemAdapter(this, desafios));
+        ItemAdapter adapter = new ItemAdapter(this,desafios);
+
+        camino.setAdapter(adapter);
+
+        camino.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent des = new Intent(CaminoAlExito.this, DesafioActivity.class);
+                des.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                des.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
+                des.putExtra("username",getIntent().getStringExtra("username"));
+                startActivity(des);
+            }
+        });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
 
@@ -55,6 +70,8 @@ public class CaminoAlExito extends AppCompatActivity {
                     case R.id.navigation_home:
                         Intent home = new Intent(CaminoAlExito.this, HomeActivity.class);
                         home.putExtra("username",getIntent().getExtras().getString("username"));
+                        home.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        home.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(home);
                         return true;
                     case R.id.camino_al_exito:
@@ -64,12 +81,17 @@ public class CaminoAlExito extends AppCompatActivity {
                     case R.id.historico:
                         Intent his = new Intent(CaminoAlExito.this, HistoricoActivity.class);
                         his.putExtra("username",getIntent().getExtras().getString("username"));
+                        his.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        his.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(his);
                         return true;
-                /*case R.id.perfil:
-                    Intent perfil = new Intent(bottomNavbarActivity.this, Perfil.class);
+                case R.id.perfil:
+                    Intent perfil = new Intent(CaminoAlExito.this, PerfilActivity.class);
+                    perfil.putExtra("username",getIntent().getExtras().getString("username"));
+                    perfil.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                    perfil.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
                     startActivity(perfil);
-                    return true;*/
+                    return true;
                 }
                 return false;
             }
@@ -84,6 +106,7 @@ public class CaminoAlExito extends AppCompatActivity {
         private ArrayList<String> desafios;
 
         public ItemAdapter(Context context, ArrayList<String> desafios) {
+            super();
             this.context = context;
             this.desafios= desafios;
         }
@@ -121,9 +144,9 @@ public class CaminoAlExito extends AppCompatActivity {
 
 
             int posicion = Integer.parseInt(this.desafios.get(position));
-            int aux = posicion++;
+            int aux = posicion +1;
 
-            String nombreText = "DesafioActivity " + aux;
+            String nombreText = "Desafio " + aux;
 
             nombre.setText(nombreText);
 
@@ -145,7 +168,7 @@ public class CaminoAlExito extends AppCompatActivity {
 
             if(nivelUsuario <= 7)
             {
-                if(position <= 7)
+                if(posicion <= 7)
                 {
                     if(posicion <= nivelUsuario)
                     {

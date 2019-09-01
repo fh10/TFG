@@ -1,5 +1,12 @@
 package id.oscar.code.miband3.Activities;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothProfile;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -8,14 +15,20 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Random;
 
+import id.oscar.code.miband3.Helpers.CustomBluetoothProfile;
 import id.oscar.code.miband3.Helpers.DatabaseHelper;
 import id.oscar.code.miband3.Helpers.Usuario;
 import id.oscar.code.miband3.R;
@@ -28,6 +41,7 @@ public class DesafioActivity extends AppCompatActivity {
     TextView repeticionesText;
     TextView descripcionEjercicioText;
     TextView contadorText;
+    TextView contadorMinText;
     Button siguiente;
     Button anterior;
     Button comenzar;
@@ -36,7 +50,13 @@ public class DesafioActivity extends AppCompatActivity {
     int cont;
     int tiempo; //30 s *1000 milisegundos 20 repeticiones cada una con un descanso de 60 segundos.
     int pasos;
+    String desc;
     DatabaseHelper db;
+    MainActivity pulsera;
+    String nombre = "";
+    String tiempoEjercicio = "";
+    String repeticiones = "";
+    int minutos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,141 +69,164 @@ public class DesafioActivity extends AppCompatActivity {
         descripcionEjercicioText = (TextView) findViewById(R.id.descripcion_correr);
         contadorText = (TextView) findViewById(R.id.contador);
         tiempoText = (TextView) findViewById(R.id.tiempo);
+        contadorMinText =  (TextView) findViewById(R.id.contador2);
         repeticionesText = (TextView) findViewById(R.id.repeticiones);
         siguiente = (Button) findViewById(R.id.siguiente);
         anterior = (Button) findViewById(R.id.anterior);
         comenzar = (Button) findViewById(R.id.comenzar_ejercicio);
+
         user = db.getUser(getIntent().getStringExtra("username"));
 
         random = new Random();
-        int num =  random.nextInt(3 - 1 + 1) + 1;
+        int num = random.nextInt(3 - 1 + 1) + 1;
 
-        if(num == 1)
-        {
+        if (num == 1) {
             imagen.setImageResource(R.drawable.puente1);
-        }
-        else if(num == 2)
-        {
+            nombre = "puente1";
+        } else if (num == 2) {
             imagen.setImageResource(R.drawable.puente2);
+            nombre = "puente1";
+        } else {
+            imagen.setImageResource(R.drawable.puente3);
+            nombre = "puente1";
+        }
+
+        desc = db.getDescripcion(nombre);
+
+        descripcionText.setText(desc);
+
+        if(user.getNivel() <= 7)
+        {
+            tiempoEjercicio = "20 s";
+            repeticiones = "2 series con 2 repeticiones del ejercicio";
+        }
+        else if(user.getNivel() <= 17)
+        {
+            tiempoEjercicio = "30 s";
+            repeticiones = "2 series con 4 repeticiones del ejercicio";
         }
         else
         {
-            imagen.setImageResource(R.drawable.puente3);
+            tiempoEjercicio = "40 s";
+            repeticiones = "3 series con 3 repeticiones del ejercicio";
         }
+        tiempoText.setText(tiempoEjercicio);
+        repeticionesText.setText(repeticiones);
 
         cont++;
 
         siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int aux =  0;
+                int aux = 0;
 
-                if(cont == 1)
-                {
+                if (cont == 1) {
                     aux = random.nextInt(3 - 1 + 1) + 1;
 
-                    if(aux == 1)
-                    {
+                    if (aux == 1) {
                         imagen.setImageResource(R.drawable.abdominales1);
-                    }
-                    else if(aux == 2)
-                    {
+                        nombre = "abdominales1";
+                    } else if (aux == 2) {
                         imagen.setImageResource(R.drawable.abdominales2);
-                    }
-                    else
-                    {
+                        nombre = "abdominales2";
+                    } else {
                         imagen.setImageResource(R.drawable.abdominales3);
+                        nombre = "abdominales3";
                     }
-                }
-                else if(cont == 2)
-                {
+
+                    desc = db.getDescripcion(nombre);
+
+                    descripcionText.setText(desc);
+
+                } else if (cont == 2) {
                     aux = random.nextInt(3 - 1 + 1) + 1;
 
-                    if(aux == 1)
-                    {
+                    if (aux == 1) {
                         imagen.setImageResource(R.drawable.sentadilla1);
-                    }
-                    else if(aux == 2)
-                    {
+                        nombre = "sentadilla1";
+                    } else if (aux == 2) {
                         imagen.setImageResource(R.drawable.sentadilla2);
-                    }
-                    else
-                    {
+                        nombre = "sentadilla2";
+                    } else {
                         imagen.setImageResource(R.drawable.sentadilla3);
+                        nombre = "sentadilla3";
                     }
-                }
-                else if(cont == 3)
-                {
+
+                    desc = db.getDescripcion(nombre);
+
+                    descripcionText.setText(desc);
+
+                } else if (cont == 3) {
                     aux = random.nextInt(3 - 1 + 1) + 1;
 
-                    if(aux == 1)
-                    {
+                    if (aux == 1) {
                         imagen.setImageResource(R.drawable.brazos1);
-                    }
-                    else if(aux == 2)
-                    {
+                        nombre = "brazos1";
+                    } else if (aux == 2) {
                         imagen.setImageResource(R.drawable.brazos2);
-                    }
-                    else
-                    {
+                        nombre = "brazos2";
+                    } else {
                         imagen.setImageResource(R.drawable.brazos3);
+                        nombre = "brazos3";
                     }
-                }
-                else if(cont == 4)
-                {
-                    if(user.getNivel() > 7)
-                    {
+
+                    desc = db.getDescripcion(nombre);
+
+                    descripcionText.setText(desc);
+                } else if (cont == 4) {
+                    if (user.getNivel() > 7) {
                         aux = random.nextInt(3 - 1 + 1) + 1;
 
-                        if(aux == 1)
-                        {
+                        if (aux == 1) {
                             imagen.setImageResource(R.drawable.brazos1);
-                        }
-                        else if(aux == 2)
-                        {
+                            nombre = "brazos1";
+                        } else if (aux == 2) {
                             imagen.setImageResource(R.drawable.brazos2);
-                        }
-                        else
-                        {
+                            nombre = "brazos2";
+                        } else {
                             imagen.setImageResource(R.drawable.brazos3);
+                            nombre = "brazos3";
                         }
-                    }
-                    else
-                    {
+
+                        desc = db.getDescripcion(nombre);
+
+                        descripcionText.setText(desc);
+                    } else {
                         imagen.setVisibility(View.INVISIBLE);
                         descripcionText.setVisibility(View.INVISIBLE);
                         tiempoText.setVisibility(View.INVISIBLE);
                         repeticionesText.setVisibility(View.INVISIBLE);
                         contadorText.setVisibility(View.VISIBLE);
                         descripcionEjercicioText.setVisibility(View.VISIBLE);
+                        contadorMinText.setVisibility(View.VISIBLE);
                         pasos = 9000;
-                        tiempo = 15000;
+                        tiempo = 5000;
+                        minutos = 10;
                         String mensaje = "En este último ejercicio tendrás que correr durante 10 minutos y conseguir realizar " + pasos + " pasos.";
                         descripcionEjercicioText.setText(mensaje);
                         comenzar.setVisibility(View.VISIBLE);
+                        contadorText.setText((tiempo/1000)+"");
+                        contadorMinText.setText(minutos+"");
                     }
-                }
-                else if(cont == 5)
-                {
-                    if(user.getNivel() > 17)
-                    {
+                } else if (cont == 5) {
+                    if (user.getNivel() > 17) {
                         aux = random.nextInt(3 - 1 + 1) + 1;
 
-                        if(aux == 1)
-                        {
+                        if (aux == 1) {
                             imagen.setImageResource(R.drawable.sentadilla2);
-                        }
-                        else if(aux == 2)
-                        {
+                            nombre = "sentadilla2";
+                        } else if (aux == 2) {
                             imagen.setImageResource(R.drawable.sentadilla3);
-                        }
-                        else
-                        {
+                            nombre = "sentadilla3";
+                        } else {
                             imagen.setImageResource(R.drawable.sentadilla1);
+                            nombre = "sentadilla1";
                         }
-                    }
-                    else
-                    {
+
+                        desc = db.getDescripcion(nombre);
+
+                        descripcionText.setText(desc);
+                    } else {
                         imagen.setVisibility(View.INVISIBLE);
                         descripcionText.setVisibility(View.INVISIBLE);
                         tiempoText.setVisibility(View.INVISIBLE);
@@ -195,6 +238,7 @@ public class DesafioActivity extends AppCompatActivity {
                         String mensaje = "En este último ejercicio tendrás que correr durante 10 minutos y conseguir realizar " + pasos + " pasos.";
                         descripcionEjercicioText.setText(mensaje);
                         comenzar.setVisibility(View.VISIBLE);
+                        contadorMinText.setText(minutos+":");
                     }
                 }
 
@@ -202,13 +246,23 @@ public class DesafioActivity extends AppCompatActivity {
             }
         });
 
-        comenzar.setOnClickListener(new View.OnClickListener()
-        {
-             @Override
-             public void onClick(View v) {
-                 MiContador contador = new MiContador(tiempo,1000);
-                 contador.start();
-             }
+        comenzar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    MiContador contador = new MiContador(tiempo, 1000);
+                    contador.start();
+            }
+        });
+
+        anterior.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ce = new Intent(DesafioActivity.this, CaminoAlExito.class);
+                ce.putExtra("username", getIntent().getExtras().getString("username"));
+                ce.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                ce.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
+                startActivity(ce);
+            }
         });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
@@ -219,28 +273,37 @@ public class DesafioActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         Intent home = new Intent(DesafioActivity.this, HomeActivity.class);
+                        home.putExtra("username", getIntent().getExtras().getString("username"));
+                        home.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                        home.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(home);
                         return true;
                     case R.id.camino_al_exito:
                         Intent ce = new Intent(DesafioActivity.this, CaminoAlExito.class);
-                        ce.putExtra("username",getIntent().getExtras().getString("username"));
+                        ce.putExtra("username", getIntent().getExtras().getString("username"));
+                        ce.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                        ce.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(ce);
                         return true;
                     case R.id.historico:
                         Intent his = new Intent(DesafioActivity.this, HistoricoActivity.class);
-                        his.putExtra("username",getIntent().getExtras().getString("username"));
+                        his.putExtra("username", getIntent().getExtras().getString("username"));
+                        his.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                        his.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(his);
                         return true;
                     case R.id.perfil:
                         Intent perfil = new Intent(DesafioActivity.this, PerfilActivity.class);
-                        perfil.putExtra("username",getIntent().getExtras().getString("username"));
+                        perfil.putExtra("username", getIntent().getExtras().getString("username"));
+                        perfil.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                        perfil.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
                         startActivity(perfil);
                         return true;
                 }
                 return false;
             }
         });
-        navigation.setSelectedItemId(R.id.camino_al_exito);
+        //navigation.setSelectedItemId(R.id.camino_al_exito);
     }
 
     private class MiContador extends CountDownTimer {
@@ -251,47 +314,246 @@ public class DesafioActivity extends AppCompatActivity {
 
         @Override
         public void onFinish() {
-            int pasosConseguidos = 0;
 
-            if(pasosConseguidos < pasos)
+            if(minutos == 0)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DesafioActivity.this);
-                builder.setMessage("no has superado el objetivo, ¡vuelve a intentarlo con más fuerza!")
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent ce = new Intent(DesafioActivity.this, CaminoAlExito.class);
-                                ce.putExtra("username",getIntent().getExtras().getString("username"));
-                                startActivity(ce);
-                            }
-                        });
-                // Create the AlertDialog object and return it
-                builder.create();
+                Pulsera pulsera = new Pulsera();
+
+                pulsera.setmDeviceName(getIntent().getExtras().getString("nombreDispositivo"));
+                pulsera.setmDeviceAddress(getIntent().getStringExtra("direccionDispositivo"));
+                pulsera.startConnecting();
+                pulsera.stateConnected();
+                pulsera.getSteps();
+
+                Calendar cal = Calendar.getInstance();
+
+                String fechaHoy = cal.get(Calendar.DAY_OF_MONTH) + "/" +cal.get(Calendar.MONTH)+ "/" + cal.get(Calendar.YEAR);
+
+                db.addEjercicio(user.getId(),user.getUsername(),fechaHoy,pulsera.pasos,pulsera.distancia,pulsera.calorias);
+
+                if(pulsera.pasos < pasos)
+                {
+                    AlertDialog alertDialog = new AlertDialog.Builder(DesafioActivity.this).create();
+                    alertDialog.setTitle("Alerta");
+                    alertDialog.setMessage("no has superado el objetivo, ¡vuelve a intentarlo con más fuerza!");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Aceptar",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent ce = new Intent(DesafioActivity.this, CaminoAlExito.class);
+                                    ce.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                                    ce.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
+                                    ce.putExtra("username",getIntent().getExtras().getString("username"));
+                                    startActivity(ce);
+                                }
+                            });
+                    alertDialog.show();
+                }
+                else
+                {
+                    user.setNivel(user.getNivel()+1);
+                    db.actualizarUsuario(user);
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(DesafioActivity.this).create();
+                    alertDialog.setTitle("Alerta");
+                    alertDialog.setMessage("Has superado el desafio, ¡ENHORABUENA!");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Aceptar",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent ce = new Intent(DesafioActivity.this, CaminoAlExito.class);
+                                    ce.putExtra("username",getIntent().getExtras().getString("username"));
+                                    ce.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                                    ce.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
+                                    startActivity(ce);
+                                }
+                            });
+                    alertDialog.show();
+                }
             }
             else
             {
-                user.setNivel(user.getNivel()+1);
-                db.actualizarUsuario(user);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(DesafioActivity.this);
-                builder.setMessage("Has superado el desafio, ¡ENHORABUENA!")
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent ce = new Intent(DesafioActivity.this, CaminoAlExito.class);
-                                ce.putExtra("username",getIntent().getExtras().getString("username"));
-                                startActivity(ce);
-                            }
-                        });
-                // Create the AlertDialog object and return it
-                builder.create();
+                MiContador contador = new MiContador(tiempo, 1000);
+                contador.start();
+                minutos = minutos-1;
+                contadorMinText.setText(minutos+"");
             }
-
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
             //texto a mostrar en cuenta regresiva en un textview
-            //countdownText.setText((millisUntilFinished/1000+""));
+            contadorText.setText((millisUntilFinished/1000+""));
 
         }
+    }
+
+    private class Pulsera{
+        Boolean isListeningHeartRate = false;
+
+        public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+        public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+        BluetoothAdapter bluetoothAdapter;
+        BluetoothGatt bluetoothGatt;
+        BluetoothDevice bluetoothDevice;
+
+        private String mDeviceName;
+        private String mDeviceAddress;
+        public short pasos;
+        public short distancia;
+        public short calorias;
+        public boolean ok;
+
+
+        public Pulsera()
+        {
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            ok = true;
+        }
+
+        public void setmDeviceName(String mDeviceName) {
+            this.mDeviceName = mDeviceName;
+        }
+
+        public void setmDeviceAddress(String mDeviceAddress) {
+            this.mDeviceAddress = mDeviceAddress;
+        }
+
+        void startConnecting() {
+
+            String address = mDeviceAddress;
+            bluetoothDevice = bluetoothAdapter.getRemoteDevice(address);
+
+            Log.v("test", "Connecting to " + address);
+            Log.v("test", "Device name " + bluetoothDevice.getName());
+
+            bluetoothGatt = bluetoothDevice.connectGatt(DesafioActivity.this, true, bluetoothGattCallback);
+        }
+
+        void stateConnected() {
+            bluetoothGatt.discoverServices();
+        }
+
+        void stateDisconnected() {
+            bluetoothGatt.disconnect();
+        }
+
+        void startScanHeartRate() {
+
+            BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.HeartRate.service)
+                    .getCharacteristic(CustomBluetoothProfile.HeartRate.controlCharacteristic);
+            bchar.setValue(new byte[]{21, 2, 1});
+            bluetoothGatt.writeCharacteristic(bchar);
+        }
+
+        void listenHeartRate() {
+            BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.HeartRate.service)
+                    .getCharacteristic(CustomBluetoothProfile.HeartRate.measurementCharacteristic);
+            bluetoothGatt.setCharacteristicNotification(bchar, true);
+            BluetoothGattDescriptor descriptor = bchar.getDescriptor(CustomBluetoothProfile.HeartRate.descriptor);
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            bluetoothGatt.writeDescriptor(descriptor);
+            isListeningHeartRate = true;
+        }
+
+        void getSteps() {
+            while(ok) {
+                try {
+                        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.Basic.service)
+                                .getCharacteristic(CustomBluetoothProfile.Basic.stepsCharacteristic);
+                        bchar.setValue(new byte[]{21, 2, 1});
+                        ok = false;
+                        if (!bluetoothGatt.readCharacteristic(bchar)) {
+                            Toast.makeText(DesafioActivity.this, "Failed get battery info", Toast.LENGTH_SHORT).show();
+                        }
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+        final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
+
+            @Override
+            public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                super.onConnectionStateChange(gatt, status, newState);
+                Log.v("test", "onConnectionStateChange");
+
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    stateConnected();
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    stateDisconnected();
+                }
+
+            }
+
+            @Override
+            public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                super.onServicesDiscovered(gatt, status);
+                Log.v("test", "onServicesDiscovered");
+                listenHeartRate();
+            }
+
+            @Override
+            public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+                super.onCharacteristicRead(gatt, characteristic, status);
+                Log.v("test", "onCharacteristicRead");
+                byte[] data = characteristic.getValue();
+
+                int steps = 0xff & data[1] | (0xff & data[2]) << 8;
+                pasos= (short) steps;
+                int distanza = ((((data[5] & 255) | ((data[6] & 255) << 8)) | (data[7] & 16711680)) | ((data[8] & 255) << 24));
+                distancia= (short) distanza;
+                int calorie = ((((data[9] & 255) | ((data[10] & 255) << 8)) | (data[11] & 16711680)) | ((data[12] & 255) << 24));
+                calorias = (short) calorie;
+
+            }
+
+
+
+            @Override
+            public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+                super.onCharacteristicWrite(gatt, characteristic, status);
+                Log.v("test", "onCharacteristicWrite");
+            }
+
+            @Override
+            public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+                super.onCharacteristicChanged(gatt, characteristic);
+                Log.v("test", "onCharacteristicChanged");
+                byte[] data = characteristic.getValue();
+            }
+
+            @Override
+            public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+                super.onDescriptorRead(gatt, descriptor, status);
+                Log.v("test", "onDescriptorRead");
+            }
+
+            @Override
+            public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+                super.onDescriptorWrite(gatt, descriptor, status);
+                Log.v("test", "onDescriptorWrite");
+            }
+
+            @Override
+            public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
+                super.onReliableWriteCompleted(gatt, status);
+                Log.v("test", "onReliableWriteCompleted");
+            }
+
+            @Override
+            public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+                super.onReadRemoteRssi(gatt, rssi, status);
+                Log.v("test", "onReadRemoteRssi");
+            }
+
+            @Override
+            public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+                super.onMtuChanged(gatt, mtu, status);
+                Log.v("test", "onMtuChanged");
+            }
+
+        };
     }
 }

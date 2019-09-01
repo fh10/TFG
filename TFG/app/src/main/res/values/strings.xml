@@ -75,4 +75,6 @@
     <string name="modificar">Modificar</string>
     <string name="actualizar">Actualizar</string>
     <string name="zancada">Zancada</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="anterior">Anterior</string>
 </resources>

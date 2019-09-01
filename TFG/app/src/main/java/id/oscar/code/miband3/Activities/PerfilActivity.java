@@ -1,14 +1,18 @@
 package id.oscar.code.miband3.Activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import id.oscar.code.miband3.Helpers.DatabaseHelper;
 import id.oscar.code.miband3.Helpers.Usuario;
@@ -87,6 +91,12 @@ public class PerfilActivity extends AppCompatActivity {
             nivel.setBackgroundColor(0xcc9900);
         }
 
+        if(getIntent().getExtras().getString("nombreDispositivo") != null || getIntent().getExtras().getString("direccionDispositivo") != null)
+        {
+            pulsera.setClickable(false);
+            Toast.makeText(this, "Ya estás conectado", Toast.LENGTH_SHORT).show();
+        }
+
         nivel.setGravity(Gravity.CENTER);
         aux = "Desafio " + (user.getNivel()+1);
         nivel.setText(aux);
@@ -95,7 +105,9 @@ public class PerfilActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent actualizar = new Intent(PerfilActivity.this, ActualizarUsuario.class);
-                actualizar.putExtra("username",user.getUsername());
+                actualizar.putExtra("username", getIntent().getExtras().getString("username"));
+                actualizar.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                actualizar.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
                 startActivity(actualizar);
             }
         });
@@ -104,8 +116,49 @@ public class PerfilActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                Intent pulsera = new Intent(PerfilActivity.this,DeviceScanActivity.class);
+                pulsera.putExtra("username", getIntent().getExtras().getString("username"));
+                pulsera.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
+                pulsera.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
                startActivity(pulsera);
             }
         });
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        Intent home = new Intent(PerfilActivity.this, HomeActivity.class);
+                        home.putExtra("username",getIntent().getStringExtra("username"));
+                        home.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        home.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
+                        startActivity(home);
+                        return true;
+                    case R.id.camino_al_exito:
+                        Intent ce = new Intent(PerfilActivity.this, CaminoAlExito.class);
+                        ce.putExtra("username",getIntent().getExtras().getString("username"));
+                        ce.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        ce.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
+                        startActivity(ce);
+                        return true;
+                    case R.id.historico:
+                        Intent his = new Intent(PerfilActivity.this, HistoricoActivity.class);
+                        his.putExtra("username",getIntent().getExtras().getString("username"));
+                        his.putExtra("nombreDispositivo",getIntent().getStringExtra("nombreDispositivo"));
+                        his.putExtra("direccionDispositivo",getIntent().getStringExtra("direccionDispositivo"));
+                        startActivity(his);
+                        return true;
+                    case R.id.perfil:
+                       /* Intent perfil = new Intent(DesafioActivity.this, PerfilActivity.class);
+                        perfil.putExtra("username",getIntent().getExtras().getString("username"));
+                        startActivity(perfil);*/
+                        return true;
+                }
+                return false;
+            }
+        });
+        navigation.setSelectedItemId(R.id.perfil);
     }
 }
