@@ -123,8 +123,8 @@
 
     <EditText
         android:id="@+id/colorNivel"
-        android:layout_width="77dp"
-        android:layout_height="24dp"
+        android:layout_width="97dp"
+        android:layout_height="23dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="80dp"
         android:layout_marginBottom="87dp"
@@ -133,7 +133,7 @@
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.357"
+        app:layout_constraintHorizontal_bias="0.389"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:layout_constraintVertical_bias="0.698" />
@@ -209,8 +209,8 @@
 
     <EditText
         android:id="@+id/colorNivelSiguiente"
-        android:layout_width="77dp"
-        android:layout_height="24dp"
+        android:layout_width="98dp"
+        android:layout_height="25dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="500dp"
         android:layout_marginEnd="80dp"

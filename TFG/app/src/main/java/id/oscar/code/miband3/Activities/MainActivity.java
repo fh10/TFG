@@ -134,6 +134,7 @@ public class MainActivity extends Activity {
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stateDisconnected();
                 Intent home  = new Intent(MainActivity.this,HomeActivity.class);
                 home.putExtra("username",getIntent().getExtras().getString("username"));
                 home.putExtra("nombreDispositivo",mDeviceName);

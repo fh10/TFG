@@ -170,7 +170,7 @@ public class CaminoAlExito extends AppCompatActivity {
             {
                 if(posicion <= 7)
                 {
-                    if(posicion <= nivelUsuario)
+                    if(posicion < nivelUsuario)
                     {
                         estado.setText(R.string.completado_exclamacion);
                     }
@@ -186,7 +186,7 @@ public class CaminoAlExito extends AppCompatActivity {
             }
             else if(nivelUsuario > 7 && nivelUsuario <=17)
             {
-                if(posicion > 7 && posicion <=17)
+                if(posicion > 7 && posicion <17)
                 {
                     if(posicion <= nivelUsuario)
                     {

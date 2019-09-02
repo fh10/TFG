@@ -14,6 +14,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.813"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +28,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +42,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +57,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"
@@ -79,6 +83,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.811"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,6 +97,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,6 +111,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.813"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,8 +119,8 @@
 
     <EditText
         android:id="@+id/colorNivel"
-        android:layout_width="77dp"
-        android:layout_height="24dp"
+        android:layout_width="86dp"
+        android:layout_height="22dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -123,10 +130,10 @@
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.871"
+        app:layout_constraintHorizontal_bias="0.896"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Calorias_totales_quemadas"
-        app:layout_constraintVertical_bias="0.65" />
+        app:layout_constraintVertical_bias="0.59" />
 
     <TextView
         android:id="@+id/fecha_nacimiento"
@@ -136,6 +143,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,6 +157,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="120dp"
         android:text="@string/nombre"
+        android:textAlignment="viewStart"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"
@@ -288,10 +297,17 @@
 
     <Button
         android:id="@+id/button_conectar"
-        android:layout_width="176dp"
-        android:layout_height="37dp"
-        android:text="Conectar pulsera"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="585dp" />
+        android:layout_width="181dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Cerrar sesión"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:layout_constraintEnd_toStartOf="@+id/buttonModificar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintVertical_bias="0.818" />
 
 </android.support.constraint.ConstraintLayout>

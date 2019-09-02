@@ -14,6 +14,7 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import id.oscar.code.miband3.Activities.ui.login.LoginActivity;
 import id.oscar.code.miband3.Helpers.DatabaseHelper;
 import id.oscar.code.miband3.Helpers.Usuario;
 import id.oscar.code.miband3.R;
@@ -115,11 +116,9 @@ public class PerfilActivity extends AppCompatActivity {
         pulsera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent pulsera = new Intent(PerfilActivity.this,DeviceScanActivity.class);
-                pulsera.putExtra("username", getIntent().getExtras().getString("username"));
-                pulsera.putExtra("nombreDispositivo", getIntent().getStringExtra("nombreDispositivo"));
-                pulsera.putExtra("direccionDispositivo", getIntent().getStringExtra("direccionDispositivo"));
+               Intent pulsera = new Intent(PerfilActivity.this, LoginActivity.class);
                startActivity(pulsera);
+               finish();
             }
         });
 

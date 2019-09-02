@@ -104,8 +104,8 @@
 
     <TextView
         android:id="@+id/contador"
-        android:layout_width="233dp"
-        android:layout_height="227dp"
+        android:layout_width="143dp"
+        android:layout_height="134dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -115,15 +115,15 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.901"
+        app:layout_constraintHorizontal_bias="0.694"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.145" />
 
     <TextView
         android:id="@+id/contador2"
-        android:layout_width="233dp"
-        android:layout_height="227dp"
+        android:layout_width="132dp"
+        android:layout_height="136dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -133,10 +133,10 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.146" />
 
     <Button
         android:id="@+id/comenzar_ejercicio"
@@ -160,13 +160,30 @@
         android:layout_width="349dp"
         android:layout_height="171dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:visibility="invisible"
         android:textAlignment="center"
         android:textSize="24sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contador" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="289dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="TIEMPO RESTANTE"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/contador2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

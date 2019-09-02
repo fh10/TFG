@@ -24,6 +24,7 @@ import java.util.Calendar;
 import id.oscar.code.miband3.Activities.ui.login.LoginActivity;
 import id.oscar.code.miband3.Activities.ui.login.LoginViewModel;
 import id.oscar.code.miband3.Helpers.DatabaseHelper;
+import id.oscar.code.miband3.Helpers.Usuario;
 import id.oscar.code.miband3.R;
 
 public class RegistryActivity extends AppCompatActivity {
@@ -120,7 +121,7 @@ public class RegistryActivity extends AppCompatActivity {
                     peso = NumberFormat.getInstance().parse(pesoEditText.getText().toString()).floatValue();
                     peso = peso/10;
                     altura = NumberFormat.getInstance().parse(alturaEditext.getText().toString()).floatValue();
-                    altura = altura/10;
+                    altura = altura/100;
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -152,7 +153,9 @@ public class RegistryActivity extends AppCompatActivity {
                         {
                             Toast.makeText(RegistryActivity.this,"Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                         }
-                        else
+
+
+                        if(!db.checkUser(user,password))
                         {
                             Long registrado = db.addUser(user,password,nombre,apellidos,fecha, sexo, peso,altura);
 
@@ -167,6 +170,10 @@ public class RegistryActivity extends AppCompatActivity {
                                 Toast.makeText(RegistryActivity.this,"ERROR EN EL REGISTRO!", Toast.LENGTH_SHORT).show();
                             }
 
+                        }
+                        else
+                        {
+                            Toast.makeText(RegistryActivity.this,"Nombre de usuario no disponible", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

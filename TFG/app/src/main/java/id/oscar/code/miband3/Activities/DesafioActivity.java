@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Random;
@@ -42,6 +43,7 @@ public class DesafioActivity extends AppCompatActivity {
     TextView descripcionEjercicioText;
     TextView contadorText;
     TextView contadorMinText;
+    TextView tiempoRestante;
     Button siguiente;
     Button anterior;
     Button comenzar;
@@ -57,6 +59,11 @@ public class DesafioActivity extends AppCompatActivity {
     String tiempoEjercicio = "";
     String repeticiones = "";
     int minutos;
+    int pasosObtenidos;
+    int caloriasObtenidas;
+    int pasosObtenidosAntes;
+    int caloriasObtenidasAntes;
+    ArrayList <Integer> pulsacionesObtenidas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,8 @@ public class DesafioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_desafio);
         db = new DatabaseHelper(this);
         cont = 0;
+        pulsacionesObtenidas = new ArrayList<>();
+        caloriasObtenidas = 0;
         imagen = (ImageView) findViewById(R.id.imageView5);
         descripcionText = (TextView) findViewById(R.id.descripcion);
         descripcionEjercicioText = (TextView) findViewById(R.id.descripcion_correr);
@@ -71,9 +80,13 @@ public class DesafioActivity extends AppCompatActivity {
         tiempoText = (TextView) findViewById(R.id.tiempo);
         contadorMinText =  (TextView) findViewById(R.id.contador2);
         repeticionesText = (TextView) findViewById(R.id.repeticiones);
+        tiempoRestante = (TextView) findViewById(R.id.textView15);
         siguiente = (Button) findViewById(R.id.siguiente);
         anterior = (Button) findViewById(R.id.anterior);
         comenzar = (Button) findViewById(R.id.comenzar_ejercicio);
+        pasosObtenidos = 0;
+        pasosObtenidosAntes = 0;
+        caloriasObtenidas = 0;
 
         user = db.getUser(getIntent().getStringExtra("username"));
 
@@ -93,7 +106,7 @@ public class DesafioActivity extends AppCompatActivity {
 
         desc = db.getDescripcion(nombre);
 
-        descripcionText.setText(desc);
+        descripcionText.setText("Descripción= "+desc);
 
         if(user.getNivel() <= 7)
         {
@@ -110,8 +123,9 @@ public class DesafioActivity extends AppCompatActivity {
             tiempoEjercicio = "40 s";
             repeticiones = "3 series con 3 repeticiones del ejercicio";
         }
-        tiempoText.setText(tiempoEjercicio);
-        repeticionesText.setText(repeticiones);
+
+        tiempoText.setText("Tiempo de cada ejercicio = " + tiempoEjercicio);
+        repeticionesText.setText("Repeticiones = " + repeticiones);
 
         cont++;
 
@@ -136,7 +150,7 @@ public class DesafioActivity extends AppCompatActivity {
 
                     desc = db.getDescripcion(nombre);
 
-                    descripcionText.setText(desc);
+                    descripcionText.setText("Descripción= "+desc);
 
                 } else if (cont == 2) {
                     aux = random.nextInt(3 - 1 + 1) + 1;
@@ -154,7 +168,7 @@ public class DesafioActivity extends AppCompatActivity {
 
                     desc = db.getDescripcion(nombre);
 
-                    descripcionText.setText(desc);
+                    descripcionText.setText("Descripción= "+desc);
 
                 } else if (cont == 3) {
                     aux = random.nextInt(3 - 1 + 1) + 1;
@@ -172,7 +186,7 @@ public class DesafioActivity extends AppCompatActivity {
 
                     desc = db.getDescripcion(nombre);
 
-                    descripcionText.setText(desc);
+                    descripcionText.setText("Descripción= "+desc);
                 } else if (cont == 4) {
                     if (user.getNivel() > 7) {
                         aux = random.nextInt(3 - 1 + 1) + 1;
@@ -190,7 +204,7 @@ public class DesafioActivity extends AppCompatActivity {
 
                         desc = db.getDescripcion(nombre);
 
-                        descripcionText.setText(desc);
+                        descripcionText.setText("Descripción= "+desc);
                     } else {
                         imagen.setVisibility(View.INVISIBLE);
                         descripcionText.setVisibility(View.INVISIBLE);
@@ -200,13 +214,15 @@ public class DesafioActivity extends AppCompatActivity {
                         descripcionEjercicioText.setVisibility(View.VISIBLE);
                         contadorMinText.setVisibility(View.VISIBLE);
                         pasos = 9000;
-                        tiempo = 5000;
+                        tiempo = 60000;
                         minutos = 10;
                         String mensaje = "En este último ejercicio tendrás que correr durante 10 minutos y conseguir realizar " + pasos + " pasos.";
                         descripcionEjercicioText.setText(mensaje);
                         comenzar.setVisibility(View.VISIBLE);
                         contadorText.setText((tiempo/1000)+"");
-                        contadorMinText.setText(minutos+"");
+                        contadorMinText.setText(minutos+":");
+                        siguiente.setVisibility(View.INVISIBLE);
+                        tiempoRestante.setVisibility(View.VISIBLE);
                     }
                 } else if (cont == 5) {
                     if (user.getNivel() > 17) {
@@ -225,7 +241,7 @@ public class DesafioActivity extends AppCompatActivity {
 
                         desc = db.getDescripcion(nombre);
 
-                        descripcionText.setText(desc);
+                        descripcionText.setText("Descripción= "+desc);
                     } else {
                         imagen.setVisibility(View.INVISIBLE);
                         descripcionText.setVisibility(View.INVISIBLE);
@@ -234,12 +250,44 @@ public class DesafioActivity extends AppCompatActivity {
                         contadorText.setVisibility(View.VISIBLE);
                         descripcionEjercicioText.setVisibility(View.VISIBLE);
                         pasos = 10000;
-                        tiempo = 20000;
+                        tiempo = 60000;
+                        minutos = 15;
                         String mensaje = "En este último ejercicio tendrás que correr durante 10 minutos y conseguir realizar " + pasos + " pasos.";
                         descripcionEjercicioText.setText(mensaje);
                         comenzar.setVisibility(View.VISIBLE);
                         contadorMinText.setText(minutos+":");
+                        siguiente.setVisibility(View.INVISIBLE);
+                        tiempoRestante.setVisibility(View.VISIBLE);
                     }
+                }
+                else if(cont == 6)
+                {
+                    imagen.setVisibility(View.INVISIBLE);
+                    descripcionText.setVisibility(View.INVISIBLE);
+                    tiempoText.setVisibility(View.INVISIBLE);
+                    repeticionesText.setVisibility(View.INVISIBLE);
+                    contadorText.setVisibility(View.VISIBLE);
+                    descripcionEjercicioText.setVisibility(View.VISIBLE);
+                    tiempoRestante.setVisibility(View.VISIBLE);
+
+                    if(user.getNivel() > 29)
+                    {
+                        pasos = 20000;
+                        tiempo = 60000;
+                        minutos = 25;
+                    }
+                    else
+                    {
+                        pasos = 30000;
+                        tiempo = 60000;
+                        minutos = 20;
+                    }
+
+                    String mensaje = "En este último ejercicio tendrás que correr durante 10 minutos y conseguir realizar " + pasos + " pasos.";
+                    descripcionEjercicioText.setText(mensaje);
+                    comenzar.setVisibility(View.VISIBLE);
+                    contadorMinText.setText(minutos+":");
+                    siguiente.setVisibility(View.INVISIBLE);
                 }
 
                 cont++;
@@ -249,8 +297,24 @@ public class DesafioActivity extends AppCompatActivity {
         comenzar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Pulsera pulsera = new Pulsera();
+
+                pulsera.setmDeviceName(getIntent().getExtras().getString("nombreDispositivo"));
+                pulsera.setmDeviceAddress(getIntent().getStringExtra("direccionDispositivo"));
+                pulsera.startConnecting();
+                pulsera.stateConnected();
+                pulsera.getSteps();
+                while (pasosObtenidos == 0)
+                {
+                    pulsera.getSteps();
+                }
+                pulsera.stateDisconnected();
+                pasosObtenidosAntes = pasosObtenidos;
+                caloriasObtenidasAntes = caloriasObtenidas;
+                caloriasObtenidasAntes = pulsera.calorias;
                     MiContador contador = new MiContador(tiempo, 1000);
                     contador.start();
+                    comenzar.setClickable(false);
             }
         });
 
@@ -325,17 +389,26 @@ public class DesafioActivity extends AppCompatActivity {
                 pulsera.stateConnected();
                 pulsera.getSteps();
 
+                while (pasosObtenidos == 0)
+                {
+                    pulsera.getSteps();
+                }
+
                 Calendar cal = Calendar.getInstance();
 
                 String fechaHoy = cal.get(Calendar.DAY_OF_MONTH) + "/" +cal.get(Calendar.MONTH)+ "/" + cal.get(Calendar.YEAR);
 
-                db.addEjercicio(user.getId(),user.getUsername(),fechaHoy,pulsera.pasos,pulsera.distancia,pulsera.calorias);
+                int dis = (int)(pasosObtenidos*user.getZancada());
+                int pasosRealizados = pasosObtenidos-pasosObtenidosAntes, disRealizada = dis-(int)(pasosObtenidosAntes*user.getZancada());
+                int caloriasRealizadas = caloriasObtenidas-caloriasObtenidasAntes;
+
+                db.addEjercicio(user.getId(),user.getUsername(),fechaHoy,pasosRealizados,disRealizada,caloriasRealizadas);
 
                 if(pulsera.pasos < pasos)
                 {
                     AlertDialog alertDialog = new AlertDialog.Builder(DesafioActivity.this).create();
                     alertDialog.setTitle("Alerta");
-                    alertDialog.setMessage("no has superado el objetivo, ¡vuelve a intentarlo con más fuerza!");
+                    alertDialog.setMessage("No has superado el objetivo, ¡vuelve a intentarlo con más fuerza!");
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Aceptar",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -374,9 +447,11 @@ public class DesafioActivity extends AppCompatActivity {
             else
             {
                 MiContador contador = new MiContador(tiempo, 1000);
-                contador.start();
                 minutos = minutos-1;
-                contadorMinText.setText(minutos+"");
+                contadorMinText.setText(minutos+":");
+                contador.start();
+                //pulsera2.stateDisconnected();
+
             }
         }
 
@@ -411,6 +486,30 @@ public class DesafioActivity extends AppCompatActivity {
             ok = true;
         }
 
+        public short getPasos() {
+            return pasos;
+        }
+
+        public void setPasos(short pasos) {
+            this.pasos = pasos;
+        }
+
+        public short getDistancia() {
+            return distancia;
+        }
+
+        public void setDistancia(short distancia) {
+            this.distancia = distancia;
+        }
+
+        public short getCalorias() {
+            return calorias;
+        }
+
+        public void setCalorias(short calorias) {
+            this.calorias = calorias;
+        }
+
         public void setmDeviceName(String mDeviceName) {
             this.mDeviceName = mDeviceName;
         }
@@ -440,20 +539,20 @@ public class DesafioActivity extends AppCompatActivity {
 
         void startScanHeartRate() {
 
-            BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.HeartRate.service)
-                    .getCharacteristic(CustomBluetoothProfile.HeartRate.controlCharacteristic);
-            bchar.setValue(new byte[]{21, 2, 1});
-            bluetoothGatt.writeCharacteristic(bchar);
+                    BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.HeartRate.service)
+                            .getCharacteristic(CustomBluetoothProfile.HeartRate.controlCharacteristic);
+                    bchar.setValue(new byte[]{21, 2, 1});
+                    bluetoothGatt.writeCharacteristic(bchar);
         }
 
         void listenHeartRate() {
-            BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.HeartRate.service)
-                    .getCharacteristic(CustomBluetoothProfile.HeartRate.measurementCharacteristic);
-            bluetoothGatt.setCharacteristicNotification(bchar, true);
-            BluetoothGattDescriptor descriptor = bchar.getDescriptor(CustomBluetoothProfile.HeartRate.descriptor);
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-            bluetoothGatt.writeDescriptor(descriptor);
-            isListeningHeartRate = true;
+                        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(CustomBluetoothProfile.HeartRate.service)
+                                .getCharacteristic(CustomBluetoothProfile.HeartRate.measurementCharacteristic);
+                        bluetoothGatt.setCharacteristicNotification(bchar, true);
+                        BluetoothGattDescriptor descriptor = bchar.getDescriptor(CustomBluetoothProfile.HeartRate.descriptor);
+                        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                        bluetoothGatt.writeDescriptor(descriptor);
+                        isListeningHeartRate = true;
         }
 
         void getSteps() {
@@ -498,18 +597,18 @@ public class DesafioActivity extends AppCompatActivity {
             public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
                 super.onCharacteristicRead(gatt, characteristic, status);
                 Log.v("test", "onCharacteristicRead");
+
                 byte[] data = characteristic.getValue();
 
-                int steps = 0xff & data[1] | (0xff & data[2]) << 8;
-                pasos= (short) steps;
-                int distanza = ((((data[5] & 255) | ((data[6] & 255) << 8)) | (data[7] & 16711680)) | ((data[8] & 255) << 24));
-                distancia= (short) distanza;
-                int calorie = ((((data[9] & 255) | ((data[10] & 255) << 8)) | (data[11] & 16711680)) | ((data[12] & 255) << 24));
-                calorias = (short) calorie;
-
+                    int steps = 0xff & data[1] | (0xff & data[2]) << 8;
+                    pasos= (short) steps;
+                    pasosObtenidos = pasos;
+                    int distanza = ((((data[5] & 255) | ((data[6] & 255) << 8)) | (data[7] & 16711680)) | ((data[8] & 255) << 24));
+                    distancia= (short) distanza;
+                    int calorie = ((((data[9] & 255) | ((data[10] & 255) << 8)) | (data[11] & 16711680)) | ((data[12] & 255) << 24));
+                    calorias = (short) calorie;
+                    caloriasObtenidas = calorias;
             }
-
-
 
             @Override
             public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
@@ -522,6 +621,7 @@ public class DesafioActivity extends AppCompatActivity {
                 super.onCharacteristicChanged(gatt, characteristic);
                 Log.v("test", "onCharacteristicChanged");
                 byte[] data = characteristic.getValue();
+                int heart = data[1] & 0xFF;
             }
 
             @Override

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -63,21 +65,18 @@ public class HistoricoActivity extends AppCompatActivity {
             }
         });
         navigation.setSelectedItemId(R.id.historico);
+        int dpValue = 0;
 
-        tabla = (TableLayout) findViewById(R.id.tabla);
+
 
         fechaEdit = (TextView) findViewById(R.id.fecha);
         fechaEdit.setBackgroundColor(0x76FB5E);
 
+
+        tabla = (TableLayout) findViewById(R.id.tabla);
         Usuario user = db.getUser(getIntent().getExtras().getString("username"));
 
         Cursor cursor = db.historicoEjercicios(String.valueOf(user.getId()));
-
-        /*Calendar cal = Calendar.getInstance();
-
-        String fechaHoy = cal.get(Calendar.DAY_OF_MONTH) + "/" +cal.get(Calendar.MONTH)+ "/" + cal.get(Calendar.YEAR);*/
-
-        int dpValue = 0;
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TableRow row = new TableRow(this);
